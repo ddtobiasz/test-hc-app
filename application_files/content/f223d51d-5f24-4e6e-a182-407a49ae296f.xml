@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_RunThisHour</name>
+        <uuid>f223d51d-5f24-4e6e-a182-407a49ae296f</uuid>
+        <description>Returns true if the scheduled Health Check should run during the current hour.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2033</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>with(
+  local!now: local(gmt(now()), #"_a-0000dd01-2973-8000-7030-010000010000_2192"),
+  local!today: todate(local(local!now)),
+  local!next: #"c5280c20-a309-46a1-aa7e-2ce286b11bfe"(
+    startDate: #"_a-0000dd01-2973-8000-7030-010000010000_2093",
+    date: if(local!today &lt; #"_a-0000dd01-2973-8000-7030-010000010000_2093", #"_a-0000dd01-2973-8000-7030-010000010000_2093", local!today),
+    frequency: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2136",
+    hour: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2138",
+    timezone: #"_a-0000dd01-2973-8000-7030-010000010000_2192"
+  ),
+  local!isToday: exact(text(local!next, "M/d/yyyy"), text(local!now, "M/d/yyyy")),
+  local!isThisHour: exact(text(local!now, "h"), tostring(#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2138")),
+  and(local!isToday, local!isThisHour)
+)</definition>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

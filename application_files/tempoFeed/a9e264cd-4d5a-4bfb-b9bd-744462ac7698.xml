@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tempoFeedHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <tempoFeed>
+        <uuid>a9e264cd-4d5a-4bfb-b9bd-744462ac7698</uuid>
+        <name>Appian Health Check</name>
+        <description>Appian Health Check Risk Analysis Reports</description>
+        <showInCatalog>true</showInCatalog>
+        <systemFeed>false</systemFeed>
+    </tempoFeed>
+    <roleMap>
+        <role name="administrator">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups>
+                <groupUuid>_e-0000dbd4-7e0b-8000-4af8-010000010000_9</groupUuid>
+            </groups>
+        </role>
+    </roleMap>
+</tempoFeedHaul>

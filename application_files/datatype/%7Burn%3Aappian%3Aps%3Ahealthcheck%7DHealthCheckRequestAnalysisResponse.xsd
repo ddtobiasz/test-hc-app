@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:appian:ps:healthcheck"
+  xmlns:tns="urn:appian:ps:healthcheck" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="HealthCheckRequestAnalysisResponse">
+    <xsd:sequence>
+      <xsd:element name="requestId" nillable="true" type="xsd:string"/>
+      <xsd:element name="message" nillable="true" type="xsd:string"/>
+      <xsd:element name="error" nillable="true" type="xsd:boolean"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

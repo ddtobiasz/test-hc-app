@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_UI_schedule</name>
+        <uuid>8a6adcb7-0000-4e41-ac7c-c930f219faab</uuid>
+        <description>Interface for setting the Health Check schedule.
+
+Set every rule input to 1 to test.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2068</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>#"SYSTEM_SYSRULES_formLayout"(&#xD;
+  label: "Appian Health Check Schedule",&#xD;
+  instructions: "Configure the frequency of Health Checks below. Current timezone set to " &amp; timezoneid() &amp; ".",&#xD;
+  firstColumnContents: {&#xD;
+    if (ri!isScheduleEnabled,&#xD;
+      {&#xD;
+    #"SYSTEM_SYSRULES_dateField"(&#xD;
+      label: "Start from",&#xD;
+      labelPosition: "ADJACENT",&#xD;
+      value: if(isnull(ri!startDate), now(), ri!startDate),&#xD;
+      saveInto: ri!startDate,&#xD;
+      refreshAfter: "UNFOCUS",&#xD;
+      required: true,&#xD;
+      validations: {&#xD;
+      }&#xD;
+    ),&#xD;
+    #"SYSTEM_SYSRULES_dropdownFieldByIndex"(&#xD;
+      label: "Run",&#xD;
+      labelPosition: "ADJACENT",&#xD;
+      saveInto: ri!frequency,&#xD;
+      refreshAfter: "UNFOCUS",&#xD;
+      value: ri!frequency,&#xD;
+      choiceValues: {1, 2, 3, 4},&#xD;
+      choiceLabels: apply(concat(_, #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2125"[weekday(if(isnull(ri!startDate), now(), ri!startDate), 2)]), {"every ", "every other ", "every third ", "every fourth "})&#xD;
+    ),&#xD;
+    #"SYSTEM_SYSRULES_dropdownFieldByIndex"(&#xD;
+          label: "at",&#xD;
+          labelPosition: "ADJACENT",&#xD;
+          choiceLabels: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2134",&#xD;
+          value: ri!hour + 1,&#xD;
+          saveInto: a!save(ri!hour, save!value - 1)&#xD;
+    ),&#xD;
+    #"SYSTEM_SYSRULES_integerField"(&#xD;
+      label:"Analysis period",&#xD;
+      labelPosition: "ADJACENT",&#xD;
+      value:ri!analysisPeriod,&#xD;
+      saveInto: ri!analysisPeriod,&#xD;
+      helpTooltip:"This determines the first day of analysis period (the last day being today). For example, set it to 28 if the Health Check runs every fourth week.",&#xD;
+      validations:{&#xD;
+        if(ri!analysisPeriod&lt;1,"Minimum value is 1", if(ri!analysisPeriod&gt;60, "Maximum value is 60",""))&#xD;
+      }&#xD;
+    )&#xD;
+      },&#xD;
+      {}&#xD;
+    ),&#xD;
+    #"SYSTEM_SYSRULES_sectionLayout"(&#xD;
+      firstColumnContents: {&#xD;
+        #"SYSTEM_SYSRULES_radioButtonField"(&#xD;
+          label: "Scheduling is enabled",&#xD;
+          choiceLabels: {"Yes", "No"},&#xD;
+          choiceValues: {true, false},&#xD;
+          value: ri!isScheduleEnabled,&#xD;
+          saveInto: ri!isScheduleEnabled&#xD;
+        )&#xD;
+      }&#xD;
+    )&#xD;
+  },&#xD;
+  secondColumnContents: {&#xD;
+    if (ri!isScheduleEnabled,&#xD;
+      {&#xD;
+        #"SYSTEM_SYSRULES_textField"(&#xD;
+          label: "Next three execution dates",&#xD;
+          labelPosition: "ABOVE",&#xD;
+          value: text(#"c5280c20-a309-46a1-aa7e-2ce286b11bfe"(ri!startDate, if(local(now(), timezoneid()) &lt; ri!startDate, ri!startDate, local(now(), timezoneid())), ri!frequency, ri!hour, timezoneid()), "MMM d, yyyy") &amp; ", " &amp; time(ri!hour),&#xD;
+          readOnly: true&#xD;
+        ),&#xD;
+        #"SYSTEM_SYSRULES_textField"(&#xD;
+          labelPosition: "COLLAPSED",&#xD;
+          value: text(#"c5280c20-a309-46a1-aa7e-2ce286b11bfe"(ri!startDate, if(local(now(), timezoneid()) &lt; ri!startDate, ri!startDate, local(now(), timezoneid()))+((ri!frequency*7)*1), ri!frequency, ri!hour, timezoneid()), "MMM d, yyyy") &amp; ", " &amp; time(ri!hour),&#xD;
+          readOnly: true&#xD;
+        ),&#xD;
+        #"SYSTEM_SYSRULES_textField"(&#xD;
+          labelPosition: "COLLAPSED",&#xD;
+          value: text(#"c5280c20-a309-46a1-aa7e-2ce286b11bfe"(ri!startDate, if(local(now(), timezoneid()) &lt; ri!startDate, ri!startDate, local(now(), timezoneid()))+((ri!frequency*7)*2), ri!frequency, ri!hour, timezoneid()), "MMM d, yyyy") &amp; ", " &amp; time(ri!hour),&#xD;
+          readOnly: true&#xD;
+        )&#xD;
+      },&#xD;
+      {}&#xD;
+    )&#xD;
+  },&#xD;
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(&#xD;
+    primaryButtons: {&#xD;
+      #"SYSTEM_SYSRULES_ButtonWidgetSubmit"(&#xD;
+        label: "Save",&#xD;
+        style: "PRIMARY",&#xD;
+        saveInto: {&#xD;
+          a!save(ri!timezone, timezoneid())&#xD;
+        }&#xD;
+      )&#xD;
+    }&#xD;
+  ),&#xD;
+  validations: {}&#xD;
+)</definition>
+        <namedTypedValue>
+            <name>frequency</name>
+            <type>
+                <name>int</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>hour</name>
+            <type>
+                <name>int</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>isScheduleEnabled</name>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>startDate</name>
+            <type>
+                <name>date</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>timezone</name>
+            <type>
+                <name>string</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+            <value/>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>analysisPeriod</name>
+            <type>
+                <name>int</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <metadataExpr></metadataExpr>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <typedValue>
+        <type>
+            <name>RuleTestConfig?list</name>
+            <namespace>http://www.appian.com/ae/types/2009</namespace>
+        </type>
+        <value>
+            <el>
+                <a:name/>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xsi:type="xsd:int"/>
+                    <a:nameRef>frequency</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xsi:type="xsd:int"/>
+                    <a:nameRef>hour</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xsi:type="xsd:boolean"/>
+                    <a:nameRef>isScheduleEnabled</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xsi:type="xsd:date"/>
+                    <a:nameRef>startDate</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string"/>
+                    <a:nameRef>timezone</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:ruleInputTestConfigs>
+                    <a:value xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xsi:type="xsd:int"/>
+                    <a:nameRef>analysisPeriod</a:nameRef>
+                    <a:id/>
+                </a:ruleInputTestConfigs>
+                <a:assertions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+            </el>
+        </value>
+    </typedValue>
+</contentHaul>

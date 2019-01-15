@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_GetNextScheduledDate</name>
+        <uuid>c5280c20-a309-46a1-aa7e-2ce286b11bfe</uuid>
+        <description>Returns the next date and time the Health Check will run on.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2033</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>=with(&#xD;
+  local!startDateDayOfWeek: weekday(ri!startDate),&#xD;
+  local!startDateWeekNum: weeknum(ri!startDate),&#xD;
+  local!dayOfWeek: weekday(ri!date),&#xD;
+  local!weekNum: weeknum(ri!date),&#xD;
+  &#xD;
+  /* work out the number of days before the next scheduled day */&#xD;
+  local!dayOfWeekDiff: local!dayOfWeek - local!startDateDayOfWeek,&#xD;
+  local!weekDaysToAdd: if(local!dayOfWeekDiff &lt; 1, abs(local!dayOfWeekDiff), 7 - local!dayOfWeekDiff),&#xD;
+  local!newDate: ri!date + local!weekDaysToAdd,&#xD;
+  local!newDateWeekNum: weeknum(local!newDate),&#xD;
+  &#xD;
+  /* check if health check ran roday */&#xD;
+  local!ranToday: if(hour(local(now(), ri!timezone)) &gt; ri!hour, 1, 0),&#xD;
+  &#xD;
+  /* work out the number of days to delay for until we're at the right week */&#xD;
+  local!weekNumDiff: local!newDateWeekNum - local!startDateWeekNum,&#xD;
+  local!mod: mod(local!weekNumDiff, ri!frequency),&#xD;
+  local!freqDiff: ri!frequency - local!mod,&#xD;
+  local!freqDaysToAdd: if(and(local!mod=0, local!ranToday = 0), 0, local!freqDiff*7),&#xD;
+  &#xD;
+  /* set the next scheduled date */&#xD;
+  local!nextScheduledDate: local!newDate + local!freqDaysToAdd,&#xD;
+  local!date: date(&#xD;
+    year(local!nextScheduledDate),&#xD;
+    month(local!nextScheduledDate),&#xD;
+    day(local!nextScheduledDate)&#xD;
+  ),&#xD;
+  local!date&#xD;
+)</definition>
+        <namedTypedValue>
+            <name>startDate</name>
+            <type>
+                <name>date</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>date</name>
+            <type>
+                <name>date</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>frequency</name>
+            <type>
+                <name>int</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>hour</name>
+            <type>
+                <name>int</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>timezone</name>
+            <type>
+                <name>string</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+            <value/>
+        </namedTypedValue>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_UI_manualDataUpload</name>
+        <uuid>72372e07-7918-485a-a509-2b79e64809e2</uuid>
+        <description>Interface for manually downloading the data collection file to upload to Appian Forum</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2068</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>=#"SYSTEM_SYSRULES_formLayout"(
+  label: "Download Appian Health Check Data Collection",
+  instructions: "Download the Health Check data collection file and manually upload it to Appian Forum for analysis.",
+  firstColumnContents: {
+    #"SYSTEM_SYSRULES_linkField"(
+      instructions: "Download the Appian Health Check data collection and review the contents. If there are files you do not wish to share with Appian remove them before uploading to Appian Forum.",
+      links: {
+        #"SYSTEM_SYSRULES_documentDownloadLink"(
+          label: "1. Download Data Collection",
+          document: ri!collectionDoc
+        )
+      }
+    ),
+    #"SYSTEM_SYSRULES_linkField"(
+      instructions: "Upload the Data Collection to Appian Forum for analysis. The Health Check report will be posted to the Appian Forum News feed.",
+      links: {
+        #"SYSTEM_SYSRULES_safeLink"(
+          label: "2. Upload to Appian Forum",
+          uri: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2225"
+        )
+      }
+    )
+  },
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(
+    primaryButtons: {
+      #"SYSTEM_SYSRULES_ButtonWidgetSubmit"(
+        label: "Done",
+        style: "PRIMARY",
+        saveInto: {}
+      )
+    }
+  ),
+  validations: {}
+)</definition>
+        <namedTypedValue>
+            <name>collectionDoc</name>
+            <type>
+                <name>CollaborationDocument</name>
+                <namespace>http://www.appian.com/ae/types/2009</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <constant>
+        <name>AHC_SCHEDULE_HOURS_LABELS</name>
+        <uuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2134</uuid>
+        <description>Hours of the day display labels.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2034</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <typedValue>
+            <type>
+                <name>Text?list</name>
+                <namespace>http://www.appian.com/ae/types/2009</namespace>
+            </type>
+            <value>
+                <el>00:00</el>
+                <el>01:00</el>
+                <el>02:00</el>
+                <el>03:00</el>
+                <el>04:00</el>
+                <el>05:00</el>
+                <el>06:00</el>
+                <el>07:00</el>
+                <el>08:00</el>
+                <el>09:00</el>
+                <el>10:00</el>
+                <el>11:00</el>
+                <el>12:00</el>
+                <el>13:00</el>
+                <el>14:00</el>
+                <el>15:00</el>
+                <el>16:00</el>
+                <el>17:00</el>
+                <el>18:00</el>
+                <el>19:00</el>
+                <el>20:00</el>
+                <el>21:00</el>
+                <el>22:00</el>
+                <el>23:00</el>
+            </value>
+        </typedValue>
+        <isEnvironmentSpecific>false</isEnvironmentSpecific>
+    </constant>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

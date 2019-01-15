@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_UI_requestHealthCheck</name>
+        <uuid>d0953b6c-e2ce-4cd9-99c1-46a057a689f8</uuid>
+        <description>Interface for requesting an Appian Health Check analysis</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2068</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>=#"SYSTEM_SYSRULES_formLayout"(
+  label: "Start Appian Health Check",
+  instructions: "The Appian Health Check is a powerful way to gain a deeper understanding of your Appian platform, identify potential risks, and get the most out of Appian.",
+  firstColumnContents: {
+    #"SYSTEM_SYSRULES_richTextDisplayField"(
+      value: {
+          #"SYSTEM_SYSRULES_richTextItem"(
+            text: "The Health Check will perform the following actions:",
+            style: "STRONG"
+          ),
+        #"SYSTEM_SYSRULES_richTextNumberedList"(
+          items: {
+            "Collect data about this environment's configuration and design (see caution note below)",
+            "Generate a ZIP of the environment's configuration, design and logs",
+            if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2226",
+              {
+                if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2064", "Assign a task to review the ZIP contents", {}),
+                "Upload the ZIP to Appian Forum for analysis",
+                "Post the Health Check report to the News feed"
+              },
+              {
+                "Assign a task to download the collection ZIP and manually upload to Appian Forum for analysis."
+              }
+            )
+          }
+        )
+      }
+    ),
+    if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2226",
+      #"SYSTEM_SYSRULES_richTextDisplayField"(
+        value: {
+          "This is a ",
+          if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2057", #"SYSTEM_SYSRULES_richTextItem"(text: "production ", style: "STRONG"), #"SYSTEM_SYSRULES_richTextItem"(text: "non-production ", style: "STRONG")),
+          "environment ",
+          if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2058", #"SYSTEM_SYSRULES_richTextItem"(text: "on Appian Cloud ", style: "STRONG"), #"SYSTEM_SYSRULES_richTextItem"(text: "on premise", style: "STRONG")),
+          ". If this information is incorrect contact the System Administrator to update the configuration before running the Health Check."
+        }
+      ),
+      {}
+    ),
+    #"SYSTEM_SYSRULES_richTextDisplayField"(
+      value: {
+        #"SYSTEM_SYSRULES_richTextItem"(text: "CAUTION: ", style: "STRONG"),
+        "While the collection process is running it may increase the load on your system and degrade performance for users. ",
+        #"SYSTEM_SYSRULES_richTextItem"(text: "DO NOT run the collection during business hours in a production environment or an environment with active users.", style: "EMPHASIS")
+      }
+    ),
+    #"SYSTEM_SYSRULES_richTextDisplayField"(
+      value: {
+        #"SYSTEM_SYSRULES_richTextItem"(text: "NOTE: ", style: "STRONG"),
+        if (#"_a-0000dbd4-7e1b-8000-4afc-010000010000_2226",
+          "If the results have not been posted to the News feed after an hour, contact the System Administrator.",
+          "If a task to download the collected data has not been assigned after an hour, contact the System Administrator."
+        )
+      }
+    )
+  },
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(
+    primaryButtons: {
+      #"SYSTEM_SYSRULES_ButtonWidgetSubmit"(
+        label: "Start Health Check",
+        style: "PRIMARY"
+      )
+    }
+  ),
+  validations: {
+    if (gethealthcheckcollectionstatus().isRunning, "Health Check collection is already running", "")
+  }
+)</definition>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

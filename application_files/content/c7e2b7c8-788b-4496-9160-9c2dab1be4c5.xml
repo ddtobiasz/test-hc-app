@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_UI_reviewDataCollection</name>
+        <uuid>c7e2b7c8-788b-4496-9160-9c2dab1be4c5</uuid>
+        <description>Interface for reviewing the Appian Health Check data collection.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2068</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>=#"SYSTEM_SYSRULES_formLayout"(
+  label: "Review Appian Health Check Data Collection",
+  instructions: "The data collection must be reviewed before it is uploaded to Appian Forum for analysis.",
+  firstColumnContents: {
+    #"SYSTEM_SYSRULES_sectionLayout"(
+      label: "Review Data Collection",
+      firstColumnContents: {
+        #"SYSTEM_SYSRULES_linkField"(
+          instructions: "Download the Appian Health Check data collection and review the contents. If there are files you do not wish to share with Appian remove them and upload a new version below.",
+          links: #"SYSTEM_SYSRULES_documentDownloadLink"(
+            label: "Data Collection",
+            document: ri!collectionDoc
+          )
+        )
+      }
+    ),
+    #"SYSTEM_SYSRULES_sectionLayout"(
+      label: "Upload New Data Collection",
+      firstColumnContents: {
+        #"SYSTEM_SYSRULES_fileUploadField"(
+          label: "Upload new Data Collection",
+          instructions: "If you have removed files from the above data collection, upload the new version here. This may limit the scope of the Health Check analysis.",
+          target: ri!collectionDoc
+        )
+      }
+    ),
+    #"SYSTEM_SYSRULES_checkboxFieldByIndex"(
+      instructions: "If you are happy the data collection does not contain any sensitive information you can choose to skip this manual step for future collections.",
+      choiceLabels: {"Auto-approve future collections"},
+      value: if(isnull(ri!autoApproveInFuture), null, ri!autoApproveInFuture),
+      saveInto: ri!autoApproveInFuture
+    )
+  },
+  buttons: #"SYSTEM_SYSRULES_ButtonLayout"(
+    primaryButtons: {
+      #"SYSTEM_SYSRULES_ButtonWidgetSubmit"(
+        label: "Approve",
+        style: "PRIMARY",
+        confirmMessage: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2069",
+        saveInto: {}
+      )
+    },
+    secondaryButtons: {
+      #"SYSTEM_SYSRULES_ButtonWidgetSubmit"(
+        label: "Reject",
+        style: "NORMAL",
+        value: true,
+        saveInto: ri!cancel,
+        skipValidation: true
+      )
+    }
+  ),
+  validations: {}
+)</definition>
+        <namedTypedValue>
+            <name>cancel</name>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>autoApproveInFuture</name>
+            <type>
+                <name>boolean</name>
+                <namespace>http://www.w3.org/2001/XMLSchema</namespace>
+            </type>
+        </namedTypedValue>
+        <namedTypedValue>
+            <name>collectionDoc</name>
+            <type>
+                <name>CollaborationDocument</name>
+                <namespace>http://www.appian.com/ae/types/2009</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users>
+                <userUuid>Administrator</userUuid>
+            </users>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>

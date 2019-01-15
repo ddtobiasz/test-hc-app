@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <rule>
+        <name>AHC_GetAnalysisRequestParameters</name>
+        <uuid>647d3e11-5a01-46ff-8ea9-5448361e4167</uuid>
+        <description>Returns the HTTP parameters for requesting a Health Check analysis.</description>
+        <parentUuid>_a-0000dbd4-7e1b-8000-4afc-010000010000_2033</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>{
+  #"SYSTEM_SYSRULES_httpQueryParameter"(
+    name: "is_production",
+    value: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2057"
+  ),
+  #"SYSTEM_SYSRULES_httpQueryParameter"(
+    name: "is_cloud",
+    value: #"_a-0000dbd4-7e1b-8000-4afc-010000010000_2058"
+  ),
+  #"SYSTEM_SYSRULES_httpQueryParameter"(
+    name: "start_date",
+    value: text(now()-#"_a-0000df5b-0e63-8000-9ba2-011c48011c48_271279", "yyyy-mm-dd")
+  ),
+  #"SYSTEM_SYSRULES_httpQueryParameter"(
+    name: "end_date",
+    value: null
+  )
+}</definition>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+</contentHaul>
