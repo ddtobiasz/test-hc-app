@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2794184</versionUuid>
+    <rule>
+        <name>ELT_Body</name>
+        <uuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793412</uuid>
+        <description></description>
+        <parentUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2791673</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>with(
+  local!sentences: max({
+    1,
+    round(rand() * ri!eltConfigs.countSentencesRange * 2, 0) + ri!eltConfigs.avgSentences - ri!eltConfigs.countSentencesRange
+  }),
+  
+  local!loremIpsum: tostring(#"efc9d6be-a972-4336-8c1f-6bd640512e68"(sentences: local!sentences).result.body),
+  
+  local!fullText: if(
+    local!sentences &lt;= #"_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793257",
+    
+    local!loremIpsum,
+    
+    with(
+      local!sentenceDifference: local!sentences - #"_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793257",
+      
+      local!repitions: tointeger(floor(local!sentences / #"_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793257", 1)),
+      
+      local!extraSentences: mod(local!sentences, #"_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793257"),
+      
+      concat(
+        joinarray(repeat(local!repitions, local!loremIpsum), char(10)),
+        char(10),
+        if(
+          local!extraSentences = 0,
+          null,
+          tostring(#"efc9d6be-a972-4336-8c1f-6bd640512e68"(sentences: local!extraSentences).result.body)
+        )
+      )
+    )
+  ),
+  
+  concat(
+    "Characters: ",
+    text(len(local!fullText), "#,###,###"),
+    char(10),
+    char(10),
+    local!fullText
+  )
+)</definition>
+        <namedTypedValue>
+            <name>eltConfigs</name>
+            <type>
+                <name>ELT_Configs</name>
+                <namespace>urn:com:appian:types</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2794184"/>
+    </history>
+</contentHaul>

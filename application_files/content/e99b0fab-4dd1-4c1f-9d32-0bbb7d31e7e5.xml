@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793311</versionUuid>
+    <rule>
+        <name>ELT_TEST_LoremIpsumCharsPerSentence</name>
+        <uuid>e99b0fab-4dd1-4c1f-9d32-0bbb7d31e7e5</uuid>
+        <description></description>
+        <parentUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2791673</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>load(
+  local!sentences: enumerate(10) * 10 + 10,
+  
+  local!results: #"SYSTEM_SYSRULES_forEach"(
+    items: local!sentences,
+    expression: with(
+      local!sentenceCount: fv!item,
+      local!lorems: #"SYSTEM_SYSRULES_forEach"(
+        items: enumerate(5),
+        expression: tostring(#"efc9d6be-a972-4336-8c1f-6bd640512e68"(sentences: local!sentenceCount).result.body)
+      ),
+      local!lens: apply(len(_), local!lorems),
+      local!periodLens: apply(len(_), cleanwith(local!lorems, ".")),
+      {
+        sentences: fv!item,
+        minPeriodCount: min(local!periodLens),
+        avgCharsPerSent: average(local!lens) / min(local!periodLens)
+      }
+    )
+  ),
+  
+  #"SYSTEM_SYSRULES_paragraphField"(
+    readOnly: true,
+    value: concat(
+      "Average Characters Per Sentence: ",
+      text(average(apply(todecimal(_), local!results.avgCharsPerSent)), "#.0"),
+      char(10),
+      char(10),
+      joinarray(
+        #"SYSTEM_SYSRULES_forEach"(
+          items: local!results,
+          expression: concat(
+            text(fv!item.minPeriodCount, "000"),
+            "|",
+            text(fv!item.avgCharsPerSent, "#.0")
+          )
+        ),
+        char(10)
+      )
+    )
+  )
+)</definition>
+        <metadataExpr></metadataExpr>
+        <preferredEditor>interface</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793311"/>
+    </history>
+</contentHaul>

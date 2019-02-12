@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793612</versionUuid>
+    <rule>
+        <name>ELT_Calculations</name>
+        <uuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2792048</uuid>
+        <description></description>
+        <parentUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2791673</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>with(
+  local!runTimeMinutes: if(
+    ri!eltConfigs.runTimeUnit = "days",
+    ri!eltConfigs.runTime * 24 * 60,
+    ri!eltConfigs.runTimeUnit = "hours",
+    ri!eltConfigs.runTime * 60,
+    ri!eltConfigs.runTimeUnit = "minutes",
+    ri!eltConfigs.runTime,
+    0
+  ),
+  
+  local!runTimeDays: local!runTimeMinutes / (60 * 24),
+  
+  local!isContinuous: if(ri!eltConfigs.runTimeUnit = "days", ri!eltConfigs.isContinuous, true),
+  
+  local!dailyStartHour: if(ri!eltConfigs.dailyStartHourPeriod = "PM", mod(ri!eltConfigs.dailyStartHour, 12) + 12, mod(ri!eltConfigs.dailyStartHour, 12)),
+  
+  local!dailyEndHour: if(ri!eltConfigs.dailyEndHourPeriod = "PM", mod(ri!eltConfigs.dailyEndHour, 12) + 12, if(ri!eltConfigs.dailyEndHour = 12, 24, ri!eltConfigs.dailyEndHour)),
+  
+  local!invalidDailyTime: and(
+    not(local!isContinuous),
+    local!dailyStartHour &gt;= local!dailyEndHour
+  ),
+  
+  local!emailsPerMinute: if(
+    ri!eltConfigs.iterationFrequency = "minute",
+    ri!eltConfigs.iterationCount,
+    ri!eltConfigs.iterationFrequency = "hour",
+    ri!eltConfigs.iterationCount / 60,
+    0
+  ),
+  
+  local!totalEmails: if(
+    local!invalidDailyTime,
+    0,
+    local!isContinuous,
+    floor(local!runTimeMinutes * local!emailsPerMinute, 1),
+    floor(local!runTimeMinutes * local!emailsPerMinute, 1)  * (local!dailyEndHour - local!dailyStartHour) / 24
+  ),
+  
+  local!currentHour: hour(gmt(now(), - offsetfromgmt(now(), ri!eltConfigs.timezone))),
+  
+  local!isActiveNow: if(
+    local!isContinuous,
+    true,
+    and(
+      local!currentHour &gt;= local!dailyStartHour,
+      local!currentHour &lt; local!dailyEndHour
+    )
+  ),
+  
+  local!tooLongOfRunTime: if(
+    local!runTimeDays &gt; 10,
+    "You cannot run for more than 10 days total",
+    null
+  ),
+  
+  local!iterationMinutes: if(
+    ri!eltConfigs.iterationFrequency = "minute", 
+    1,
+    ri!eltConfigs.iterationFrequency = "hour",
+    60,
+    1
+  ),
+  
+  {
+    runTimeMinutes: local!runTimeMinutes,
+    runEndTime: now() + local!runTimeDays,
+    tooLongOfRunTime: local!tooLongOfRunTime,
+    totalEmails: local!totalEmails,
+    iterationMinutes: local!iterationMinutes,
+    isContinuous: local!isContinuous,
+    invalidDailyTime: local!invalidDailyTime,
+    dailyStartHour: local!dailyStartHour,
+    dailyEndHour: local!dailyEndHour,
+    currentHour: local!currentHour,
+    isActiveNow: local!isActiveNow
+  }
+)</definition>
+        <namedTypedValue>
+            <name>eltConfigs</name>
+            <type>
+                <name>ELT_Configs</name>
+                <namespace>urn:com:appian:types</namespace>
+            </type>
+        </namedTypedValue>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793612"/>
+    </history>
+</contentHaul>

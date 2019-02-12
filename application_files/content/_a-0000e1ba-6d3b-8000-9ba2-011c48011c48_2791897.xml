@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentHaul xmlns:a="http://www.appian.com/ae/types/2009">
+    <versionUuid>_a-0000e211-a709-8000-9ba2-011c48011c48_157788</versionUuid>
+    <rule>
+        <name>ELT_DefaultConfigs</name>
+        <uuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2791897</uuid>
+        <description></description>
+        <parentUuid>_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2791673</parentUuid>
+        <visibility>
+            <advertise>false</advertise>
+            <hierarchy>true</hierarchy>
+            <indexable>true</indexable>
+            <quota>false</quota>
+            <searchable>true</searchable>
+            <system>false</system>
+            <unlogged>false</unlogged>
+        </visibility>
+        <definition>'type!{urn:com:appian:types}ELT_Configs'(
+  name: null,
+  iterationCount: 3,
+  iterationFrequency: "minute",
+  runTime: 9,
+  runTimeUnit: "hours",
+  isContinuous: true,
+  dailyStartHour: 8,
+  dailyStartHourPeriod: "AM",
+  dailyEndHour: 6,
+  dailyEndHourPeriod: "PM",
+  timezone: timezoneid(),
+  recipient: lower(user(loggedInUser(), "email")),
+  avgSentences: 130,
+  countSentencesRange: 100,
+  attachmentSize: 1,
+  attachmentPercent: 40
+)</definition>
+        <preferredEditor>legacy</preferredEditor>
+        <offlineEnabled>false</offlineEnabled>
+    </rule>
+    <roleMap public="true">
+        <role inherit="true" allowForAll="false" name="readers">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="authors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="true" allowForAll="false" name="administrators">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyReaders">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAuthors">
+            <users/>
+            <groups/>
+        </role>
+        <role inherit="false" allowForAll="false" name="denyAdministrators">
+            <users/>
+            <groups/>
+        </role>
+    </roleMap>
+    <history>
+        <historyInfo versionUuid="_a-0000e1ba-6d3b-8000-9ba2-011c48011c48_2793772"/>
+        <historyInfo versionUuid="_a-0000e211-a709-8000-9ba2-011c48011c48_151244"/>
+        <historyInfo versionUuid="_a-0000e211-a709-8000-9ba2-011c48011c48_157788"/>
+    </history>
+</contentHaul>
